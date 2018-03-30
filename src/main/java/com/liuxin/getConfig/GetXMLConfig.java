@@ -21,7 +21,6 @@ public class GetXMLConfig {
             Document document = saxReader.read(xmlFile);
             Element root = document.getRootElement();
             List<Element> va = root.elements("user");
-            //List<Node> user = root.selectNodes("user");
 
             for (Element n :va){
                 Attribute a =n.attribute("editor");
