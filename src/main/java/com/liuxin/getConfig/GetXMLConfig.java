@@ -1,37 +1,48 @@
 package com.liuxin.getConfig;
 
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.Element;
-import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
 import java.io.File;
 import java.util.List;
 
 public class GetXMLConfig {
+
     /**
-     * 获取文件的document对象，然后获取对应的根节点
-     * @author chenleixing
-     */
-    public static void main(String [] args){
+     * 通过传入的RequestName查找
+     * */
+    public RequestConfig getRequestConfig(String RequestName){
+        RequestConfig requestConfig = new RequestConfig();
         try {
             SAXReader saxReader = new SAXReader();
             File xmlFile = new File("E:\\JAVA\\InterfaceTestFramework\\src\\main\\resources\\config.xml");
             Document document = saxReader.read(xmlFile);
             Element root = document.getRootElement();
-            List<Element> va = root.elements("user");
-
-            for (Element n :va){
-                Attribute a =n.attribute("editor");
-                String c=a.getName();
-                String d = a.getValue();
-                Attribute b =n.attribute("date");
-                System.out.println(a+ "  " +c +"的值为：" + d);
-
+            List<Element> list = root.elements("ServerConfig");
+            if (list==null){
+                return null;
+            }else {
+                for (Element attr:list) {
+                    if (attr.attribute("RequestName").getValue().equals(RequestName)){
+                        requestConfig.setContextType(attr.attribute("ContextType").getValue());
+                        requestConfig.setRequestType(attr.attribute("RequestType").getValue());
+                        requestConfig.setContextLength(attr.attribute("RequestLength").getValue());
+                        return requestConfig;
+                    }
+                    else {
+                        continue;
+                    }
+                }
             }
+
         }catch (Exception e){
-            e.printStackTrace();
+             e.printStackTrace();
+        }finally {
+            return null;
         }
     }
 }
+
+
+
