@@ -13,29 +13,39 @@ public class GetXMLConfig {
      * 通过传入的RequestName查找
      * */
     public RequestConfig getRequestConfig(String RequestName){
-        RequestConfig requestConfig = new RequestConfig();
+        RequestConfig requestConfig = null;
         try {
             SAXReader saxReader = new SAXReader();
             File xmlFile = new File("E:\\JAVA\\InterfaceTestFramework\\src\\main\\resources\\config.xml");
             Document document = saxReader.read(xmlFile);
             Element root = document.getRootElement();
             List<Element> list = root.elements("ServerConfig");
-            if (list==null){
-                return null;
-            }else {
+            if (list!=null){
                 for (Element attr:list) {
-                    if (attr.attribute("RequestName").getValue().equals(RequestName)){
-                        requestConfig.setContextType(attr.attribute("ContextType").getValue());
-                        requestConfig.setRequestType(attr.attribute("RequestType").getValue());
-                        requestConfig.setContextLength(attr.attribute("RequestLength").getValue());
-                        return requestConfig;
-                    }
-                    else {
-                        continue;
+                    Element element1=attr;
+                    Element element2=attr;
+                    Element element3=attr;
+                    String temp =attr.attribute("RequestName").getValue();
+                    String temp2= element1.attribute("RequestType").getValue();
+                    String temp3= element2.attribute("ContextType").getValue();
+                    String temp4= element3.attribute("ContextLength").getValue();
+                    if (temp2 == null&&"".equals(temp2.trim())){
+                        return null;
+                    }else {
+                        if (temp2.equals(RequestName)){
+                            requestConfig.RequestType=temp2;
+                            requestConfig.ContextType=temp3;
+                            requestConfig.ContextLength=temp4;
+                            return requestConfig;
+                        }
+                        else {
+                            continue;
+                        }
                     }
                 }
+            }else {
+                return null;
             }
-
         }catch (Exception e){
              e.printStackTrace();
         }finally {
